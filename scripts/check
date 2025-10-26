@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+"${SCRIPT_DIR}/lint"
+"${SCRIPT_DIR}/fmt" --check
+"${SCRIPT_DIR}/typecheck"
+"${SCRIPT_DIR}/test"
+"${SCRIPT_DIR}/coverage"
+"${SCRIPT_DIR}/security-scan"

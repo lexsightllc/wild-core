@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  wildcore-app:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    env_file:
+      - .env.example
+    command: ["python", "-m", "wildcore"]
+    volumes:
+      - ./:/app:delegated
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

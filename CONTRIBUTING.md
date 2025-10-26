@@ -13,38 +13,38 @@ We are excited about your interest in contributing! Here are some guidelines to 
 
 ## Pull Request Process
 
-1. **Fork** the repository.
-2. Create a new branch for your feature (`git checkout -b feature/new-feature`).
-3. Commit your changes (`git commit -m 'Adds new-feature'`).
-4. Push to the branch (`git push origin feature/new-feature`).
-5. Open a **Pull Request**.
+1. **Fork** the repository and create a feature branch (`git checkout -b feature/my-feature`).
+2. Run `make bootstrap` once to set up the development toolchain and git hooks.
+3. Implement your changes with accompanying tests, documentation, and changelog updates.
+4. Verify locally with `make check` (or the individual Make targets if you need to iterate).
+5. Commit using [Conventional Commits](https://www.conventionalcommits.org/) and push your branch.
+6. Open a **Pull Request** with a clear summary of the change.
 
-## Code Style
+## Code Style & Quality
 
-* Follow PEP 8 guidelines.
-* Include docstrings for all functions, classes, and methods.
-* Write tests for new features.
+* Follow PEP 8 and the automated tooling enforced by `make lint` and `make fmt`.
+* Include docstrings for public functions, classes, and modules.
+* Write deterministic unit tests under `tests/unit/` and mirror source structure.
+* Avoid introducing new TODO/FIXME comments—capture outstanding work in GitHub issues instead.
 
 ## Development Setup
 
-1. Clone your fork of the repository
-2. Create a virtual environment:
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+git clone https://github.com/ochoaughini/WildCore.git
+cd WildCore
+make bootstrap
+source .venv/bin/activate
 ```
-3. Install development dependencies:
+
+Run checks individually or via the aggregated command:
+
 ```bash
-pip install .[dev]
-```
-4. Run tests before submitting a PR:
-```bash
-pytest
+make check
 ```
 
 ## Code Review
 
-All submissions require review. We use GitHub pull requests for this purpose.
+All submissions require review. Reviewers focus on correctness, security, maintainability, and documentation. Please be responsive to feedback and keep pull requests scoped for easier review.
 
 ## Community
 

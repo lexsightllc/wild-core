@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=common.sh
+source "${SCRIPT_DIR}/common.sh"
+
+VERSION_TAG="${VERSION_TAG:-}"
+if [[ -z "${VERSION_TAG}" ]]; then
+    abort "VERSION_TAG environment variable must be set for releases."
+fi
+
+"${SCRIPT_DIR}/build"
+
+activate_venv
+
+if ! command -v twine >/dev/null 2>&1; then
+    abort "twine is not installed. Run scripts/bootstrap to provision dev dependencies."
+fi
+
+twine check dist/*
+
+echo "Artifacts ready for release ${VERSION_TAG}. Push tags and upload using twine as needed."

@@ -11,9 +11,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Topic :: Security",
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
@@ -22,18 +21,27 @@ description = "WildCore - Advanced AI security and anomaly detection framework"
 readme = "README.md"
 authors = [{ name = "WildCore Contributors" }]
 license = { file = "LICENSE" }
-requires-python = ">=3.8"
-dependencies = ["numpy>=1.20.0"]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24,<2.0"]
 
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0.0",
-    "flake8>=4.0.0",
-    "black>=24.1.0",
-    "isort>=5.10.1",
-    "mypy>=1.7.1",
-    "ruff>=0.4.2",
+    "black==24.4.2",
+    "isort==5.13.2",
+    "ruff==0.5.4",
+    "mypy==1.10.0",
+    "pytest==8.1.1",
+    "pytest-cov==5.0.0",
+    "pip-tools==7.4.0",
+    "build==1.2.1",
+    "twine==5.1.0",
+    "pip-audit==2.7.2",
+    "bandit==1.7.9",
+    "detect-secrets==1.4.0",
+    "cyclonedx-bom==3.9.5",
+    "mkdocs==1.5.3",
+    "mkdocs-material==9.5.19",
 ]
 
 full = [
@@ -45,20 +53,20 @@ full = [
 
 [tool.black]
 line-length = 88
-target-version = ["py38"]
+target-version = ["py310"]
 
 [tool.isort]
 profile = "black"
 
-[tool.flake8]
-max-line-length = 88
-extend-ignore = ["E203", "W503", "E501", "W291", "W293", "E302", "E128", "E712"]
-
 [tool.ruff]
 line-length = 88
-extend-ignore = ["E501"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP"]
+ignore = ["E501"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 ignore_missing_imports = true
-strict = false
+strict = true

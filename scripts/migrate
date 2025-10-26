@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=common.sh
+source "${SCRIPT_DIR}/common.sh"
+
+activate_venv
+
+if [[ -f "${ROOT_DIR}/alembic.ini" ]]; then
+    alembic upgrade head "$@"
+else
+    echo "No migration runner configured. Add an alembic.ini file to enable database migrations."
+fi
