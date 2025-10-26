@@ -1,0 +1,16 @@
+SPDX-License-Identifier: MPL-2.0
+ProjectName © 2025 Augusto 'Guto' Ochoa Ughini
+
+This project is licensed under the Mozilla Public License 2.0 (MPL-2.0).
+
+Third-Party Attributions
+------------------------
+This project currently does not vendor third-party source files. Runtime
+dependencies are distributed via package managers and retain their own
+licenses; consult the respective package indexes for details.
+
+Distribution Guidance
+---------------------
+Any redistribution of WildCore must include this NOTICE file alongside the
+LICENSE. Downstream recipients must ensure that notices required by bundled
+dependencies are preserved in their distributed artefacts.

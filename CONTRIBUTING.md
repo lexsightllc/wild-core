@@ -1,3 +1,4 @@
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 # Contributing to WildCore
 
 We are excited about your interest in contributing! Here are some guidelines to help you get started.
@@ -19,6 +20,16 @@ We are excited about your interest in contributing! Here are some guidelines to 
 4. Verify locally with `make check` (or the individual Make targets if you need to iterate).
 5. Commit using [Conventional Commits](https://www.conventionalcommits.org/) and push your branch.
 6. Open a **Pull Request** with a clear summary of the change.
+
+### Licensing of Contributions
+
+By submitting code, documentation, or other material to WildCore you agree
+that your contribution is provided under the Mozilla Public License 2.0
+(MPL-2.0). Inbound=outbound terms apply: contributions are accepted under the
+same license that governs the project, ensuring continued availability under
+MPL-2.0 while permitting broader aggregation under compatible terms. Please
+include SPDX headers (`SPDX-License-Identifier: MPL-2.0`) in new files; the
+automated tooling and pre-commit hooks will help enforce this requirement.
 
 ## Code Style & Quality
 

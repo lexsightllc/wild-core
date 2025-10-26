@@ -1,7 +1,8 @@
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 # WildCore: Advanced AI Security & Anomaly Detection Framework
 
 [![CI/CD](https://github.com/ochoaughini/WildCore/actions/workflows/ci.yml/badge.svg)](https://github.com/ochoaughini/WildCore/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
 WildCore is an open-source framework for simulating, detecting, and analysing
@@ -21,6 +22,10 @@ and vector-poisoning attacks.
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
+- [Credits](#credits)
+
+## Credits
+See [NOTICE](NOTICE) for project ownership details and third-party attributions.
 
 ## Key Features
 - **Simulation Agent (`SecuritySimulationAgent`)** – configurable behaviours for
@@ -140,4 +145,8 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for
 coding standards, review expectations, and the required code of conduct.
 
 ## License
-WildCore is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+WildCore is licensed under the [Mozilla Public License 2.0](LICENSE). The MPL
+ensures that any modifications to MPL-covered files are shared under the same
+terms while allowing larger aggregates to remain proprietary. Distribution
+packages must include both the [LICENSE](LICENSE) file and the
+[NOTICE](NOTICE) file.

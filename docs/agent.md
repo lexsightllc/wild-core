@@ -1,3 +1,4 @@
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 # Agent Module Documentation
 
 The agent module contains the `SecuritySimulationAgent` class, which simulates an AI agent capable of taking on different roles and generating embeddings that can be either normal or anomalous.

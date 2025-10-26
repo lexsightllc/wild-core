@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 

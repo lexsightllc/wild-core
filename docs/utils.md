@@ -1,3 +1,4 @@
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 # Utils Module Documentation
 
 The utils module provides utility functions for generating test data, saving and loading embeddings, and evaluating detector performance.

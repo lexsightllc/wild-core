@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 name: CI
 
 on:
@@ -41,3 +42,30 @@ jobs:
             coverage.xml
             htmlcov/
           if-no-files-found: ignore
+
+  license-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install license tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install reuse scancode-toolkit
+
+      - name: Run REUSE lint
+        run: reuse lint
+
+      - name: Run ScanCode license scan
+        run: scancode --strip-root --license --summary --json-pp scancode-report.json .
+
+      - name: Upload license scan report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-scan
+          path: scancode-report.json

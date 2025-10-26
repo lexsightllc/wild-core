@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Utilities for simulating security scenarios using an AI agent."""
 import numpy as np
 from typing import Dict, List, Union, Any

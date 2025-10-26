@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 # syntax=docker/dockerfile:1.6
 FROM python:3.11-slim
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unit tests for the :mod:`wildcore.detector` module."""
 
 from __future__ import annotations
