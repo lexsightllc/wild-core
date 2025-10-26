@@ -1,0 +1,5 @@
+# Require review from core maintainers for critical paths
+*       @ochoaughini
+src/**  @ochoaughini
+scripts/** @ochoaughini
+.github/** @ochoaughini

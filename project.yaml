@@ -1,0 +1,22 @@
+name: wildcore
+language: python
+package_manager: pip
+package_name: wildcore
+runtime:
+  python: 3.11.9
+  node: 20.11.1
+entrypoints:
+  cli: python -m wildcore
+ports:
+  - 8000
+service_type: library
+owners:
+  - github: ochoaughini
+  - github: open-source-contributors
+scripts:
+  bootstrap: scripts/bootstrap
+  check: scripts/check
+ci_targets:
+  - make check
+notes: |
+  Python is the canonical runtime; Node.js is tracked for tooling compatibility.

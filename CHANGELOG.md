@@ -4,8 +4,21 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased]
 
+### Added
+- Canonical repository layout with infrastructure, configuration, assets, and documentation scaffolding.
+- Unified developer toolbelt under `scripts/` with matching Make targets and CI integration.
+- Project metadata (`project.yaml`), MkDocs configuration, and initial architectural decision record.
+- Docker build assets and example `docker-compose.yml` for local orchestration.
+- Pre-commit configuration enforcing Ruff, Black, isort, and mypy.
+
 ### Changed
-- Renamed `GutoVectorWildcard` to `SecuritySimulationAgent` for better clarity and professionalism.
+- Updated GitHub Actions workflow to run `make check` across Python 3.10 and 3.11.
+- Tightened dependency management with pinned development toolchain versions and reproducible lock files.
+- Refined README onboarding flow and documented developer tasks, tooling, and structure expectations.
+- Migrated unit tests into a deterministic `tests/unit` package and seeded randomness for reproducibility.
+
+### Removed
+- Legacy flake8 configuration in favour of Ruff-based linting.
 
 ## [0.1.0] - 2025-07-03
 ### Added

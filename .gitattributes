@@ -1,0 +1,9 @@
+* text=auto eol=lf
+
+*.py linguist-language=Python
+*.md linguist-language=Markdown
+
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.svg text

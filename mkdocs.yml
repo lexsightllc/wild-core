@@ -1,0 +1,15 @@
+site_name: WildCore
+site_description: Developer documentation for the WildCore security framework
+repo_url: https://github.com/ochoaughini/WildCore
+nav:
+  - Home: index.md
+  - Architecture Decisions:
+      - Repository Foundation: docs/adr/0001-repository-foundation.md
+theme:
+  name: material
+  language: en
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
