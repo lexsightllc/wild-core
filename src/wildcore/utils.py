@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Utility helpers for generating and persisting embeddings."""
 
 import numpy as np

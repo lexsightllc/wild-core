@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 # Require review from core maintainers for critical paths
 *       @ochoaughini
 src/**  @ochoaughini

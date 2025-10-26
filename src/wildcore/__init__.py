@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """
 WildCore - Advanced AI Security & Anomaly Detection Framework
 """

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Command line entry point for the WildCore demo pipeline."""
 
 from __future__ import annotations

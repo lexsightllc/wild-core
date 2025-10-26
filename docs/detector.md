@@ -1,3 +1,4 @@
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 # Detector Module Documentation
 
 The detector module contains the `AutoRegulatedPromptDetector` class, which provides a multi-layered defense system that combines multiple detection techniques and adjusts its own parameters in real-time.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Convenience entry point for running the WildCore simulation locally."""
 
 from __future__ import annotations
