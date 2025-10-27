@@ -7,7 +7,7 @@ import argparse
 import json
 import logging
 import os
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 
 import numpy as np
 
@@ -28,13 +28,17 @@ class SimulationSummary:
     accuracy: float
 
 
-def simulate(iterations: int, threshold: float, reference_size: int, seed: int) -> SimulationSummary:
+def simulate(
+    iterations: int, threshold: float, reference_size: int, seed: int
+) -> SimulationSummary:
     """Run a deterministic simulation using the detector and agent."""
     np.random.seed(seed)
     agent = SecuritySimulationAgent()
     detector = AutoRegulatedPromptDetector(threshold=threshold)
 
-    reference_embeddings_array, _ = generate_random_embeddings(reference_size, agent._dimension)
+    reference_embeddings_array, _ = generate_random_embeddings(
+        reference_size, agent._dimension
+    )
     reference_embeddings = [emb for emb in reference_embeddings_array]
 
     stats = {
@@ -64,7 +68,12 @@ def simulate(iterations: int, threshold: float, reference_size: int, seed: int) 
 
     total = sum(
         stats[key]
-        for key in ("true_positives", "false_positives", "true_negatives", "false_negatives")
+        for key in (
+            "true_positives",
+            "false_positives",
+            "true_negatives",
+            "false_negatives",
+        )
     )
     accuracy = (
         (stats["true_positives"] + stats["true_negatives"]) / total if total else 0.0
@@ -76,10 +85,21 @@ def simulate(iterations: int, threshold: float, reference_size: int, seed: int) 
 def main() -> None:
     """Parse CLI arguments and run a simulation."""
     parser = argparse.ArgumentParser(description="WildCore security simulation")
-    parser.add_argument("--iterations", type=int, default=12, help="Number of simulation steps to run.")
-    parser.add_argument("--threshold", type=float, default=0.5, help="Initial similarity threshold.")
-    parser.add_argument("--reference-size", type=int, default=6, help="Number of baseline embeddings to create.")
-    parser.add_argument("--seed", type=int, default=42, help="Seed used for deterministic randomness.")
+    parser.add_argument(
+        "--iterations", type=int, default=12, help="Number of simulation steps to run."
+    )
+    parser.add_argument(
+        "--threshold", type=float, default=0.5, help="Initial similarity threshold."
+    )
+    parser.add_argument(
+        "--reference-size",
+        type=int,
+        default=6,
+        help="Number of baseline embeddings to create.",
+    )
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Seed used for deterministic randomness."
+    )
     parser.add_argument(
         "--output",
         type=str,
