@@ -38,6 +38,15 @@ See [NOTICE](NOTICE) for project ownership details and third-party attributions.
 - **Unified tooling** – consistent scripts and Make targets mirror the CI
   pipeline, ensuring local verification matches remote automation.
 
+## Recent Enhancements
+
+- **Refactored Agent State Management** – Eliminated global state, converting to instance variables for thread-safety and cleaner architecture.
+- **Enhanced Error Handling** – Comprehensive input validation and error messages across all modules (Agent, Detector, Utils).
+- **Advanced Detector Configuration** – New configurable options: `min_threshold`, `max_threshold`, `enable_adaptation`, and `ensemble_voting_threshold` for fine-grained control.
+- **Comprehensive Test Coverage** – Added 27 integration tests and 10 E2E tests covering edge cases, error scenarios, and complete workflows (34 tests total, 100% pass rate).
+- **Pre-built Configurations** – Example detector profiles for sensitive, balanced, and lenient detection scenarios in `configs/`.
+- **Detailed Usage Guide** – New [USAGE_GUIDE.md](USAGE_GUIDE.md) with practical patterns, best practices, and troubleshooting.
+
 ## Architecture
 ```mermaid
 graph TD

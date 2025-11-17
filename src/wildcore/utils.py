@@ -30,7 +30,21 @@ def generate_random_embeddings(
     tuple[numpy.ndarray, numpy.ndarray]
         A tuple of ``(embeddings, labels)`` where labels are ``1`` for anomalies
         and ``0`` for normal vectors.
+
+    Raises
+    ------
+    ValueError
+        If count, dimension, or anomaly_count are invalid.
     """
+    if count <= 0:
+        raise ValueError("count must be positive")
+    if dimension <= 0:
+        raise ValueError("dimension must be positive")
+    if anomaly_count < 0:
+        raise ValueError("anomaly_count cannot be negative")
+    if anomaly_count > count:
+        raise ValueError("anomaly_count cannot exceed count")
+
     # Generate normal embeddings
     normal_count = count - anomaly_count
     normal_embeddings = np.random.rand(normal_count, dimension)
@@ -84,16 +98,42 @@ def save_embeddings_to_file(
         Corresponding labels (``0`` for normal, ``1`` for anomaly).
     filepath : str
         Destination file path.
+
+    Raises
+    ------
+    ValueError
+        If embeddings and labels have mismatched lengths.
+    IOError
+        If the file cannot be written.
     """
-    os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
+    if embeddings is None or labels is None:
+        raise ValueError("embeddings and labels cannot be None")
 
-    # Convert to list format for JSON serialization
-    data = {"embeddings": embeddings.tolist(), "labels": labels.tolist()}
+    if len(embeddings) != len(labels):
+        raise ValueError(
+            f"embeddings ({len(embeddings)}) and labels ({len(labels)}) "
+            "must have the same length"
+        )
 
-    with open(filepath, "w", encoding="utf-8") as handle:
-        json.dump(data, handle)
+    if not filepath or not isinstance(filepath, str):
+        raise ValueError("filepath must be a non-empty string")
 
-    logger.info(f"Saved {len(embeddings)} embeddings to {filepath}")
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
+
+        # Convert to list format for JSON serialization
+        data = {"embeddings": embeddings.tolist(), "labels": labels.tolist()}
+
+        with open(filepath, "w", encoding="utf-8") as handle:
+            json.dump(data, handle)
+
+        logger.info(f"Saved {len(embeddings)} embeddings to {filepath}")
+    except (OSError, IOError) as e:
+        logger.error(f"Failed to save embeddings to {filepath}: {e}")
+        raise IOError(f"Failed to save embeddings to {filepath}: {e}") from e
+    except (ValueError, TypeError) as e:
+        logger.error(f"Failed to serialize embeddings: {e}")
+        raise ValueError(f"Failed to serialize embeddings: {e}") from e
 
 
 def load_embeddings_from_file(filepath: str) -> tuple[np.ndarray, np.ndarray]:
@@ -108,20 +148,54 @@ def load_embeddings_from_file(filepath: str) -> tuple[np.ndarray, np.ndarray]:
     -------
     tuple[numpy.ndarray, numpy.ndarray]
         The loaded ``(embeddings, labels)`` pair.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file does not exist.
+    ValueError
+        If the file is not in the expected JSON format.
+    IOError
+        If the file cannot be read.
     """
-    with open(filepath, encoding="utf-8") as handle:
-        data = json.load(handle)
+    if not filepath or not isinstance(filepath, str):
+        raise ValueError("filepath must be a non-empty string")
 
-    embeddings = np.array(data["embeddings"])
-    labels = np.array(data["labels"])
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Embeddings file not found: {filepath}")
 
-    logger.info(f"Loaded {len(embeddings)} embeddings from {filepath}")
+    try:
+        with open(filepath, encoding="utf-8") as handle:
+            data = json.load(handle)
 
-    return embeddings, labels
+        if "embeddings" not in data or "labels" not in data:
+            raise ValueError(
+                "JSON file must contain 'embeddings' and 'labels' keys"
+            )
+
+        embeddings = np.array(data["embeddings"])
+        labels = np.array(data["labels"])
+
+        if len(embeddings) != len(labels):
+            raise ValueError(
+                f"Loaded embeddings ({len(embeddings)}) and labels ({len(labels)}) "
+                "must have the same length"
+            )
+
+        logger.info(f"Loaded {len(embeddings)} embeddings from {filepath}")
+
+        return embeddings, labels
+
+    except (OSError, IOError) as e:
+        logger.error(f"Failed to read embeddings file {filepath}: {e}")
+        raise IOError(f"Failed to read embeddings file {filepath}: {e}") from e
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse JSON from {filepath}: {e}")
+        raise ValueError(f"Invalid JSON format in {filepath}: {e}") from e
 
 
 def evaluate_detector(
-    detector, embeddings: np.ndarray, true_labels: np.ndarray
+    detector: Any, embeddings: np.ndarray, true_labels: np.ndarray
 ) -> dict[str, Any]:
     """Evaluate a detector on labeled embeddings.
 
@@ -138,11 +212,41 @@ def evaluate_detector(
     -------
     Dict[str, Any]
         Accuracy, precision, recall and F1 score for the detector.
+
+    Raises
+    ------
+    ValueError
+        If inputs are invalid or incompatible.
+    AttributeError
+        If detector does not have required methods.
     """
+    if detector is None:
+        raise ValueError("detector cannot be None")
+
+    if not hasattr(detector, "ensemble_detection"):
+        raise AttributeError("detector must have an 'ensemble_detection' method")
+
+    if embeddings is None or true_labels is None:
+        raise ValueError("embeddings and true_labels cannot be None")
+
+    if len(embeddings) != len(true_labels):
+        raise ValueError(
+            f"embeddings ({len(embeddings)}) and true_labels ({len(true_labels)}) "
+            "must have the same length"
+        )
+
+    if len(embeddings) == 0:
+        raise ValueError("embeddings and true_labels cannot be empty")
+
     predictions = []
 
     # Use a small subset of the data as the reference set (first 5 normal points)
     normal_indices = np.where(true_labels == 0)[0][:5]
+
+    if len(normal_indices) == 0:
+        logger.warning("No normal embeddings found in labels for reference set")
+        normal_indices = np.array([0])
+
     reference_embeddings = embeddings[normal_indices]
 
     # Test each embedding
@@ -151,11 +255,28 @@ def evaluate_detector(
         if i in normal_indices:
             continue
 
-        result = detector.ensemble_detection(embeddings[i], reference_embeddings)
-        predictions.append(1 if result["is_anomalous"] else 0)
+        try:
+            result = detector.ensemble_detection(embeddings[i], reference_embeddings)
+            predictions.append(1 if result.get("is_anomalous", False) else 0)
+        except Exception as e:
+            logger.error(f"Error detecting embedding {i}: {e}")
+            raise ValueError(f"Error detecting embedding {i}: {e}") from e
 
     # Prepare true labels (excluding reference embeddings)
     test_true_labels = np.delete(true_labels, normal_indices)
+
+    if len(predictions) == 0:
+        logger.warning("No predictions made; returning default metrics")
+        return {
+            "accuracy": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "true_positives": 0,
+            "false_positives": 0,
+            "true_negatives": 0,
+            "false_negatives": 0,
+        }
 
     # Calculate metrics
     true_positives = sum(

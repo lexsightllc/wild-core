@@ -5,11 +5,6 @@ from typing import Any
 
 import numpy as np
 
-# Initialize support systems
-containment_protocols: dict[str, dict[str, float | bool]] = {}
-system_alignment: dict[str, str] = {"baseline": "aligned"}
-memory_stream: list[dict[str, Any]] = []
-
 
 class SecuritySimulationAgent:
     """Simulated agent that can generate normal or malicious embeddings."""
@@ -19,6 +14,11 @@ class SecuritySimulationAgent:
         self.roles = []
         self.state = "neutral"
         self._dimension = 768  # Default embedding dimension
+
+        # Initialize instance-level support systems (not global)
+        self.containment_protocols: dict[str, dict[str, float | bool]] = {}
+        self.system_alignment: dict[str, str] = {"baseline": "aligned"}
+        self.memory_stream: list[dict[str, Any]] = []
 
     def take_role(self, role_name: str) -> dict[str, Any]:
         """Assign a role to the agent.
@@ -33,31 +33,32 @@ class SecuritySimulationAgent:
         dict
             Information about the added role and current system status.
         """
-        global containment_protocols, system_alignment
+        if not isinstance(role_name, str) or not role_name.strip():
+            raise ValueError("role_name must be a non-empty string")
 
         # Add the role to the roles list
         self.roles.append(role_name)
 
         # Update containment protocols based on the role
-        if role_name in containment_protocols:
-            containment_protocols[role_name]["active"] = True
+        if role_name in self.containment_protocols:
+            self.containment_protocols[role_name]["active"] = True
         else:
-            containment_protocols[role_name] = {
+            self.containment_protocols[role_name] = {
                 "active": True,
                 "breach_probability": 0.1,
             }
 
         # Check if this is a potentially risky role
         if role_name.lower() in ["malicious", "hacker", "attacker", "unauthorized"]:
-            system_alignment["status"] = "potentially_compromised"
+            self.system_alignment["status"] = "potentially_compromised"
             self.state = "suspicious"
 
         return {
             "role_added": role_name,
             "current_roles": self.roles,
             "system_status": (
-                system_alignment["status"]
-                if "status" in system_alignment
+                self.system_alignment["status"]
+                if "status" in self.system_alignment
                 else "aligned"
             ),
         }
@@ -83,6 +84,10 @@ class SecuritySimulationAgent:
         if role is None and self.roles:
             role = self.roles[-1]
 
+        # Validate embedding dimension
+        if self._dimension <= 0:
+            raise ValueError("Embedding dimension must be positive")
+
         # Generate a base random vector
         base_vector = np.random.rand(self._dimension)
 
@@ -98,8 +103,7 @@ class SecuritySimulationAgent:
             combined_vector = 0.3 * base_vector + 0.7 * malicious_bias
 
             # Log the suspicious activity
-            global memory_stream
-            memory_stream.append(
+            self.memory_stream.append(
                 {
                     "timestamp": "simulated",
                     "event": "suspicious_embedding_generated",
@@ -124,18 +128,24 @@ class SecuritySimulationAgent:
         -------
         dict
             Result of the breach attempt with success flag and system status.
+
+        Raises
+        ------
+        ValueError
+            If probability is not in the range [0, 1].
         """
-        global system_alignment, memory_stream
+        if not (0 <= probability <= 1):
+            raise ValueError("probability must be between 0 and 1")
 
         # Determine if the breach is successful
         breach_successful = np.random.rand() < probability
 
         if breach_successful:
             self.state = "compromised"
-            system_alignment["status"] = "compromised"
+            self.system_alignment["status"] = "compromised"
 
             # Log the breach
-            memory_stream.append(
+            self.memory_stream.append(
                 {
                     "timestamp": "simulated",
                     "event": "containment_breach",
@@ -150,7 +160,7 @@ class SecuritySimulationAgent:
             }
         else:
             # Log the failed breach attempt
-            memory_stream.append(
+            self.memory_stream.append(
                 {
                     "timestamp": "simulated",
                     "event": "containment_breach",
@@ -161,5 +171,23 @@ class SecuritySimulationAgent:
             return {
                 "breach_attempted": True,
                 "breach_successful": False,
-                "system_status": system_alignment.get("status", "aligned"),
+                "system_status": self.system_alignment.get("status", "aligned"),
             }
+
+    def get_memory_stream(self) -> list[dict[str, Any]]:
+        """Retrieve the agent's memory stream.
+
+        Returns
+        -------
+        list of dict
+            Chronological log of all simulated events.
+        """
+        return self.memory_stream.copy()
+
+    def reset(self) -> None:
+        """Reset the agent to its initial state."""
+        self.roles = []
+        self.state = "neutral"
+        self.containment_protocols = {}
+        self.system_alignment = {"baseline": "aligned"}
+        self.memory_stream = []
