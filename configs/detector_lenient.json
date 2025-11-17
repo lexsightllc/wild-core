@@ -1,0 +1,13 @@
+{
+  "detector": {
+    "description": "Lenient detector configuration for low-risk scenarios",
+    "threshold": 0.7,
+    "window_size": 5,
+    "adaptation_rate": 0.2,
+    "min_threshold": 0.5,
+    "max_threshold": 0.95,
+    "enable_adaptation": true,
+    "ensemble_voting_threshold": 3,
+    "notes": "Strict voting requirement (3/3 methods must agree) to minimize false positives. Higher threshold."
+  }
+}

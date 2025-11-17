@@ -1,0 +1,13 @@
+{
+  "detector": {
+    "description": "Default detector configuration for WildCore",
+    "threshold": 0.5,
+    "window_size": 10,
+    "adaptation_rate": 0.1,
+    "min_threshold": 0.1,
+    "max_threshold": 0.9,
+    "enable_adaptation": true,
+    "ensemble_voting_threshold": 2,
+    "notes": "Balanced configuration for general-purpose anomaly detection"
+  }
+}
